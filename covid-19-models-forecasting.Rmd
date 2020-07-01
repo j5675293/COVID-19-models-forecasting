@@ -3,6 +3,7 @@ title: "COVID-19 - Forecasting and compare machine learning models"
 author: "Adrien BORDERON"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
+  pdf_document: default
   html_document:
     df_print: paged
 ---

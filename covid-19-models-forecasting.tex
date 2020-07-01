@@ -1,0 +1,1148 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={COVID-19 - Forecasting and compare machine learning models},
+  pdfauthor={Adrien BORDERON},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{longtable}
+
+\title{COVID-19 - Forecasting and compare machine learning models}
+\author{Adrien BORDERON}
+\date{01 July, 2020}
+
+\begin{document}
+\maketitle
+
+Load the following libraries.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(tidyverse)}
+\KeywordTok{library}\NormalTok{(tidymodels)}
+\KeywordTok{library}\NormalTok{(modeltime)}
+\KeywordTok{library}\NormalTok{(timetk)   }
+\KeywordTok{library}\NormalTok{(lubridate)}
+\KeywordTok{library}\NormalTok{(readr)}
+\KeywordTok{library}\NormalTok{(dplyr)}
+\KeywordTok{library}\NormalTok{(tidyr)}
+\KeywordTok{library}\NormalTok{(glmnet)}
+\KeywordTok{library}\NormalTok{(randomForest)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{data-on-covid-19-coronavirus-by-our-world-in-data}{%
+\section{\texorpdfstring{Data on COVID-19 (coronavirus) by \emph{Our
+World in
+Data}}{Data on COVID-19 (coronavirus) by Our World in Data}}\label{data-on-covid-19-coronavirus-by-our-world-in-data}}
+
+COVID-19 dataset is a collection of the COVID-19 data maintained by
+\href{https://ourworldindata.org/coronavirus}{\emph{Our World in Data}}.
+It is updated daily and includes data on confirmed cases, deaths, and
+testing, as well as other variables of potential interest.
+
+We'll start with a covid daily time series data set that includes
+\textbf{new daily cases}. We'll simplify the data set to a univariate
+time series with columns, ``date'' and ``value''.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{data_daily  <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"~/Workdir/COVID-19-models-forecasting/data/owid-covid-data.csv"}\NormalTok{)}
+\NormalTok{data_daily <-}\StringTok{ }\NormalTok{data_daily }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(date, new_cases) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{drop_na}\NormalTok{(new_cases)}
+
+\NormalTok{time_series_covid19_confirmed_global <-}\StringTok{ }\KeywordTok{aggregate}\NormalTok{(data_daily}\OperatorTok{$}\NormalTok{new_cases, }\DataTypeTok{by=}\KeywordTok{list}\NormalTok{(}\DataTypeTok{date=}\NormalTok{data_daily}\OperatorTok{$}\NormalTok{date), }\DataTypeTok{FUN=}\NormalTok{sum)}
+
+\NormalTok{covid19_confirmed_global_tbl <-}\StringTok{ }\NormalTok{time_series_covid19_confirmed_global }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{select}\NormalTok{(date, x) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{rename}\NormalTok{(}\DataTypeTok{value=}\NormalTok{x) }
+
+\NormalTok{covid19_confirmed_global_tbl}\OperatorTok{$}\NormalTok{date <-}\StringTok{ }\KeywordTok{as.Date}\NormalTok{(covid19_confirmed_global_tbl}\OperatorTok{$}\NormalTok{date, }\DataTypeTok{format =} \StringTok{"%Y-%m-%d"}\NormalTok{)}
+\NormalTok{covid19_confirmed_global_tbl <-}\StringTok{ }\NormalTok{covid19_confirmed_global_tbl[covid19_confirmed_global_tbl[[}\StringTok{"date"}\NormalTok{]] }\OperatorTok{>=}\StringTok{ "2020-01-17"}\NormalTok{, ]}
+
+\NormalTok{covid19_confirmed_global_tbl <-}\StringTok{ }\KeywordTok{as.tibble}\NormalTok{(covid19_confirmed_global_tbl)}
+\NormalTok{covid19_confirmed_global_tbl}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 166 x 2
+##    date       value
+##    <date>     <dbl>
+##  1 2020-01-17    10
+##  2 2020-01-18    34
+##  3 2020-01-19   272
+##  4 2020-01-20    40
+##  5 2020-01-21   306
+##  6 2020-01-22   284
+##  7 2020-01-23   194
+##  8 2020-01-24   532
+##  9 2020-01-25   906
+## 10 2020-01-26  1346
+## # ... with 156 more rows
+\end{verbatim}
+
+\hypertarget{show-covid-19-new-daily-cases}{%
+\subsection{Show COVID-19 new daily
+cases}\label{show-covid-19-new-daily-cases}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{covid19_confirmed_global_tbl }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{plot_time_series}\NormalTok{(date, value, }\DataTypeTok{.interactive =} \OtherTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{covid-19-models-forecasting_files/figure-latex/unnamed-chunk-3-1.pdf}
+
+\hypertarget{train-test}{%
+\section{Train / Test}\label{train-test}}
+
+Split time series into training and testing sets. We use the last ****5
+days** of data as the testing set.
+
+\hypertarget{traintest-split-time-serie}{%
+\subsection{Train/test split time
+serie}\label{traintest-split-time-serie}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{splits <-}\StringTok{ }\NormalTok{covid19_confirmed_global_tbl }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{time_series_split}\NormalTok{(}\DataTypeTok{assess =} \StringTok{"5 days"}\NormalTok{, }\DataTypeTok{cumulative =} \OtherTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Using date_var: date
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{splits }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{tk_time_series_cv_plan}\NormalTok{() }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{plot_time_series_cv_plan}\NormalTok{(date, value, }\DataTypeTok{.interactive =} \OtherTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{covid-19-models-forecasting_files/figure-latex/unnamed-chunk-4-1.pdf}
+
+\hypertarget{modeling}{%
+\section{Modeling}\label{modeling}}
+
+\hypertarget{automatic-models}{%
+\subsection{Automatic Models}\label{automatic-models}}
+
+Several models to see this process :
+
+\hypertarget{auto-arima}{%
+\subsubsection{Auto ARIMA}\label{auto-arima}}
+
+Auto Arima Model fitting process.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{model_fit_arima <-}\StringTok{ }\KeywordTok{arima_reg}\NormalTok{() }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{set_engine}\NormalTok{(}\StringTok{"auto_arima"}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{fit}\NormalTok{(value }\OperatorTok{~}\StringTok{ }\NormalTok{date, }\KeywordTok{training}\NormalTok{(splits))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## frequency = 7 observations per 1 week
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{model_fit_arima}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## parsnip model object
+## 
+## Fit time:  339ms 
+## Series: outcome 
+## ARIMA(2,1,2)(0,0,2)[7] with drift 
+## 
+## Coefficients:
+##          ar1      ar2      ma1     ma2    sma1    sma2      drift
+##       1.0928  -0.5854  -1.6122  0.8593  0.1954  0.3654  2001.7886
+## s.e.  0.0932   0.0879   0.0692  0.0662  0.1019  0.0941   858.2301
+## 
+## sigma^2 estimated as 2.12e+08:  log likelihood=-1759.24
+## AIC=3534.47   AICc=3535.43   BIC=3559.08
+\end{verbatim}
+
+\hypertarget{prophet}{%
+\subsubsection{Prophet}\label{prophet}}
+
+Prophet Model fitting process.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{model_fit_prophet <-}\StringTok{ }\KeywordTok{prophet_reg}\NormalTok{() }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{set_engine}\NormalTok{(}\StringTok{"prophet"}\NormalTok{, }\DataTypeTok{yearly.seasonality =} \OtherTok{TRUE}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{fit}\NormalTok{(value }\OperatorTok{~}\StringTok{ }\NormalTok{date, }\KeywordTok{training}\NormalTok{(splits))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Disabling daily seasonality. Run prophet with daily.seasonality=TRUE to override this.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{model_fit_prophet}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## parsnip model object
+## 
+## Fit time:  62ms 
+## PROPHET Model
+## - growth: 'linear'
+## - n.changepoints: 25
+## - seasonality.mode: 'additive'
+## - extra_regressors: 0
+\end{verbatim}
+
+\hypertarget{machine-learning-models}{%
+\subsection{Machine Learning Models}\label{machine-learning-models}}
+
+\hypertarget{preprocessing-recipe}{%
+\subsubsection{Preprocessing Recipe}\label{preprocessing-recipe}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{recipe_spec <-}\StringTok{ }\KeywordTok{recipe}\NormalTok{(value }\OperatorTok{~}\StringTok{ }\NormalTok{date, }\KeywordTok{training}\NormalTok{(splits)) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{step_timeseries_signature}\NormalTok{(date) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{step_rm}\NormalTok{(}\KeywordTok{contains}\NormalTok{(}\StringTok{"am.pm"}\NormalTok{), }\KeywordTok{contains}\NormalTok{(}\StringTok{"hour"}\NormalTok{), }\KeywordTok{contains}\NormalTok{(}\StringTok{"minute"}\NormalTok{),}
+          \KeywordTok{contains}\NormalTok{(}\StringTok{"second"}\NormalTok{), }\KeywordTok{contains}\NormalTok{(}\StringTok{"xts"}\NormalTok{)) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{step_fourier}\NormalTok{(date, }\DataTypeTok{period =} \DecValTok{365}\NormalTok{, }\DataTypeTok{K =} \DecValTok{5}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{step_dummy}\NormalTok{(}\KeywordTok{all_nominal}\NormalTok{())}
+
+\NormalTok{recipe_spec }\OperatorTok{%>%}\StringTok{ }\KeywordTok{prep}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }\KeywordTok{juice}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 161 x 47
+##    date       value date_index.num date_year date_year.iso date_half
+##    <date>     <dbl>          <int>     <int>         <int>     <int>
+##  1 2020-01-17    10     1579219200      2020          2020         1
+##  2 2020-01-18    34     1579305600      2020          2020         1
+##  3 2020-01-19   272     1579392000      2020          2020         1
+##  4 2020-01-20    40     1579478400      2020          2020         1
+##  5 2020-01-21   306     1579564800      2020          2020         1
+##  6 2020-01-22   284     1579651200      2020          2020         1
+##  7 2020-01-23   194     1579737600      2020          2020         1
+##  8 2020-01-24   532     1579824000      2020          2020         1
+##  9 2020-01-25   906     1579910400      2020          2020         1
+## 10 2020-01-26  1346     1579996800      2020          2020         1
+## # ... with 151 more rows, and 41 more variables: date_quarter <int>,
+## #   date_month <int>, date_day <int>, date_wday <int>, date_mday <int>,
+## #   date_qday <int>, date_yday <int>, date_mweek <int>, date_week <int>,
+## #   date_week.iso <int>, date_week2 <int>, date_week3 <int>, date_week4 <int>,
+## #   date_mday7 <int>, date_sin365_K1 <dbl>, date_cos365_K1 <dbl>,
+## #   date_sin365_K2 <dbl>, date_cos365_K2 <dbl>, date_sin365_K3 <dbl>,
+## #   date_cos365_K3 <dbl>, date_sin365_K4 <dbl>, date_cos365_K4 <dbl>,
+## #   date_sin365_K5 <dbl>, date_cos365_K5 <dbl>, date_month.lbl_01 <dbl>,
+## #   date_month.lbl_02 <dbl>, date_month.lbl_03 <dbl>, date_month.lbl_04 <dbl>,
+## #   date_month.lbl_05 <dbl>, date_month.lbl_06 <dbl>, date_month.lbl_07 <dbl>,
+## #   date_month.lbl_08 <dbl>, date_month.lbl_09 <dbl>, date_month.lbl_10 <dbl>,
+## #   date_month.lbl_11 <dbl>, date_wday.lbl_1 <dbl>, date_wday.lbl_2 <dbl>,
+## #   date_wday.lbl_3 <dbl>, date_wday.lbl_4 <dbl>, date_wday.lbl_5 <dbl>,
+## #   date_wday.lbl_6 <dbl>
+\end{verbatim}
+
+With a recipe in-hand, we can set up our machine learning pipelines.
+
+\hypertarget{elastic-net}{%
+\subsubsection{Elastic Net}\label{elastic-net}}
+
+Making an Elastic NET model
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{model_spec_glmnet <-}\StringTok{ }\KeywordTok{linear_reg}\NormalTok{(}\DataTypeTok{penalty =} \FloatTok{0.01}\NormalTok{, }\DataTypeTok{mixture =} \FloatTok{0.5}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{set_engine}\NormalTok{(}\StringTok{"glmnet"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Fitted workflow
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{workflow_fit_glmnet <-}\StringTok{ }\KeywordTok{workflow}\NormalTok{() }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{add_model}\NormalTok{(model_spec_glmnet) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{add_recipe}\NormalTok{(recipe_spec }\OperatorTok{%>%}\StringTok{ }\KeywordTok{step_rm}\NormalTok{(date)) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{fit}\NormalTok{(}\KeywordTok{training}\NormalTok{(splits))}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{random-forest}{%
+\subsubsection{Random Forest}\label{random-forest}}
+
+Fit a Random Forest
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{model_spec_rf <-}\StringTok{ }\KeywordTok{rand_forest}\NormalTok{(}\DataTypeTok{trees =} \DecValTok{500}\NormalTok{, }\DataTypeTok{min_n =} \DecValTok{50}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{set_engine}\NormalTok{(}\StringTok{"randomForest"}\NormalTok{)}
+
+\NormalTok{workflow_fit_rf <-}\StringTok{ }\KeywordTok{workflow}\NormalTok{() }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{add_model}\NormalTok{(model_spec_rf) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{add_recipe}\NormalTok{(recipe_spec }\OperatorTok{%>%}\StringTok{ }\KeywordTok{step_rm}\NormalTok{(date)) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{fit}\NormalTok{(}\KeywordTok{training}\NormalTok{(splits))}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{prophet-boost}{%
+\subsubsection{Prophet Boost}\label{prophet-boost}}
+
+Set the model up using a workflow
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{model_spec_prophet_boost <-}\StringTok{ }\KeywordTok{prophet_boost}\NormalTok{() }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{set_engine}\NormalTok{(}\StringTok{"prophet_xgboost"}\NormalTok{, }\DataTypeTok{yearly.seasonality =} \OtherTok{TRUE}\NormalTok{) }
+
+\NormalTok{workflow_fit_prophet_boost <-}\StringTok{ }\KeywordTok{workflow}\NormalTok{() }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{add_model}\NormalTok{(model_spec_prophet_boost) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{add_recipe}\NormalTok{(recipe_spec) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{fit}\NormalTok{(}\KeywordTok{training}\NormalTok{(splits))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Disabling daily seasonality. Run prophet with daily.seasonality=TRUE to override this.
+\end{verbatim}
+
+\begin{verbatim}
+## [12:45:42] WARNING: amalgamation/../src/learner.cc:480: 
+## Parameters: { validation } might not be used.
+## 
+##   This may not be accurate due to some parameters are only used in language bindings but
+##   passed down to XGBoost core.  Or some parameters are not used but slip through this
+##   verification. Please open an issue if you find above cases.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{workflow_fit_prophet_boost}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## == Workflow [trained] ======================================================================================================================================================
+## Preprocessor: Recipe
+## Model: prophet_boost()
+## 
+## -- Preprocessor ------------------------------------------------------------------------------------------------------------------------------------------------------------
+## 4 Recipe Steps
+## 
+## * step_timeseries_signature()
+## * step_rm()
+## * step_fourier()
+## * step_dummy()
+## 
+## -- Model -------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## PROPHET w/ XGBoost Errors
+## ---
+## Model 1: PROPHET
+## - growth: 'linear'
+## - n.changepoints: 25
+## - seasonality.mode: 'additive'
+## 
+## ---
+## Model 2: XGBoost Errors
+## 
+## xgboost::xgb.train(params = list(eta = 0.3, max_depth = 6, gamma = 0, 
+##     colsample_bytree = 1, min_child_weight = 1, subsample = 1), 
+##     data = x, nrounds = 15, early_stopping_rounds = NULL, objective = "reg:squarederror", 
+##     validation = 0)
+\end{verbatim}
+
+\hypertarget{model-evaluation-and-selection}{%
+\section{Model evaluation and
+selection}\label{model-evaluation-and-selection}}
+
+Organize the models with IDs and creates generic descriptions.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{model_table <-}\StringTok{ }\KeywordTok{modeltime_table}\NormalTok{(}
+\NormalTok{  model_fit_arima, }
+\NormalTok{  model_fit_prophet,}
+\NormalTok{  workflow_fit_glmnet,}
+\NormalTok{  workflow_fit_rf,}
+\NormalTok{  workflow_fit_prophet_boost}
+\NormalTok{) }
+
+\NormalTok{model_table}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # Modeltime Table
+## # A tibble: 5 x 3
+##   .model_id .model     .model_desc                      
+##       <int> <list>     <chr>                            
+## 1         1 <fit[+]>   ARIMA(2,1,2)(0,0,2)[7] WITH DRIFT
+## 2         2 <fit[+]>   PROPHET                          
+## 3         3 <workflow> GLMNET                           
+## 4         4 <workflow> RANDOMFOREST                     
+## 5         5 <workflow> PROPHET W/ XGBOOST ERRORS
+\end{verbatim}
+
+\hypertarget{calibration}{%
+\subsection{Calibration}\label{calibration}}
+
+Quantify error and estimate confidence intervals.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{calibration_table <-}\StringTok{ }\NormalTok{model_table }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{modeltime_calibrate}\NormalTok{(}\KeywordTok{testing}\NormalTok{(splits))}
+
+\NormalTok{calibration_table}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # Modeltime Table
+## # A tibble: 5 x 5
+##   .model_id .model     .model_desc                       .type .calibration_data
+##       <int> <list>     <chr>                             <chr> <list>           
+## 1         1 <fit[+]>   ARIMA(2,1,2)(0,0,2)[7] WITH DRIFT Test  <tibble [5 x 4]> 
+## 2         2 <fit[+]>   PROPHET                           Test  <tibble [5 x 4]> 
+## 3         3 <workflow> GLMNET                            Test  <tibble [5 x 4]> 
+## 4         4 <workflow> RANDOMFOREST                      Test  <tibble [5 x 4]> 
+## 5         5 <workflow> PROPHET W/ XGBOOST ERRORS         Test  <tibble [5 x 4]>
+\end{verbatim}
+
+\hypertarget{forecast-testing-set}{%
+\section{Forecast (Testing Set)}\label{forecast-testing-set}}
+
+Visualize the testing predictions (forecast).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{calibration_table }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{modeltime_forecast}\NormalTok{(}\DataTypeTok{actual_data =}\NormalTok{ covid19_confirmed_global_tbl) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{plot_modeltime_forecast}\NormalTok{(}\DataTypeTok{.interactive =} \OtherTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 'new_data' is missing. Using '.calibration_data' to forecast.
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in max(ids, na.rm = TRUE): no non-missing arguments to max; returning
+## -Inf
+\end{verbatim}
+
+\includegraphics{covid-19-models-forecasting_files/figure-latex/unnamed-chunk-14-1.pdf}
+
+\hypertarget{accuracy-testing-set}{%
+\subsection{Accuracy (Testing Set)}\label{accuracy-testing-set}}
+
+Calculate the testing accuracy to compare the models.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{calibration_table }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{modeltime_accuracy}\NormalTok{() }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{table_modeltime_accuracy}\NormalTok{(}\DataTypeTok{.interactive =} \OtherTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\captionsetup[table]{labelformat=empty,skip=1pt}
+\begin{longtable}{cllrrrrrr}
+\caption*{
+\large Accuracy Table\\ 
+\small \\ 
+} \\ 
+\toprule
+.model\_id & .model\_desc & .type & mae & mape & mase & smape & rmse & rsq \\ 
+\midrule
+1 & ARIMA(2,1,2)(0,0,2)[7] WITH DRIFT & Test & 22526.77 & 6.26 & 1.22 & 6.51 & 25367.86 & 0.94 \\ 
+2 & PROPHET & Test & 21943.96 & 6.45 & 1.19 & 6.34 & 24090.94 & 0.02 \\ 
+3 & GLMNET & Test & 28088.56 & 7.77 & 1.53 & 8.18 & 32302.35 & 1.00 \\ 
+4 & RANDOMFOREST & Test & 84009.73 & 23.71 & 4.56 & 27.11 & 87343.15 & 0.36 \\ 
+5 & PROPHET W/ XGBOOST ERRORS & Test & 20410.54 & 6.14 & 1.11 & 5.92 & 24731.97 & 0.12 \\ 
+\bottomrule
+\end{longtable}
+
+\hypertarget{analyze-results}{%
+\subsection{Analyze Results}\label{analyze-results}}
+
+From the accuracy measures and forecast results, we see that:
+
+\begin{itemize}
+\tightlist
+\item
+  RANDOMFOREST model is not a good fit for this data.
+\item
+  The best model are GLMNET and Prophet + XGBoost Let's exclude the
+  RANDOMFOREST from our final model, then make future forecasts with the
+  remaining models.
+\end{itemize}
+
+\hypertarget{refit-and-forecast-forward-global-in-world}{%
+\section{Refit and Forecast Forward (Global in
+world)}\label{refit-and-forecast-forward-global-in-world}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{calibration_table }\OperatorTok{%>%}
+\StringTok{  }\CommentTok{# Remove RANDOMFOREST model with low accuracy}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(.model_id }\OperatorTok{!=}\StringTok{ }\DecValTok{4}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }
+\StringTok{  }\CommentTok{# Refit and Forecast Forward}
+\StringTok{  }\KeywordTok{modeltime_refit}\NormalTok{(covid19_confirmed_global_tbl) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{modeltime_forecast}\NormalTok{(}\DataTypeTok{h =} \StringTok{"3 months"}\NormalTok{, }\DataTypeTok{actual_data =}\NormalTok{ covid19_confirmed_global_tbl) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{plot_modeltime_forecast}\NormalTok{(}\DataTypeTok{.interactive =} \OtherTok{FALSE}\NormalTok{, }\DataTypeTok{.title =} \StringTok{"Compare all models forecast Plot"}\NormalTok{, }\DataTypeTok{.y_lab =} \StringTok{"New daily cases"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## frequency = 7 observations per 1 week
+\end{verbatim}
+
+\begin{verbatim}
+## Disabling daily seasonality. Run prophet with daily.seasonality=TRUE to override this.
+## Disabling daily seasonality. Run prophet with daily.seasonality=TRUE to override this.
+\end{verbatim}
+
+\begin{verbatim}
+## [12:45:46] WARNING: amalgamation/../src/learner.cc:480: 
+## Parameters: { validation } might not be used.
+## 
+##   This may not be accurate due to some parameters are only used in language bindings but
+##   passed down to XGBoost core.  Or some parameters are not used but slip through this
+##   verification. Please open an issue if you find above cases.
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in max(ids, na.rm = TRUE): no non-missing arguments to max; returning
+## -Inf
+\end{verbatim}
+
+\includegraphics{covid-19-models-forecasting_files/figure-latex/unnamed-chunk-16-1.pdf}
+
+\hypertarget{arima-model-forecast}{%
+\subsection{ARIMA model forecast}\label{arima-model-forecast}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{calibration_table }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(.model_id }\OperatorTok{==}\StringTok{ }\DecValTok{1}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\CommentTok{# Refit and Forecast Forward}
+\StringTok{  }\KeywordTok{modeltime_refit}\NormalTok{(covid19_confirmed_global_tbl) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{modeltime_forecast}\NormalTok{(}\DataTypeTok{h =} \StringTok{"3 months"}\NormalTok{, }\DataTypeTok{actual_data =}\NormalTok{ covid19_confirmed_global_tbl) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{plot_modeltime_forecast}\NormalTok{(}\DataTypeTok{.interactive =} \OtherTok{FALSE}\NormalTok{, }\DataTypeTok{.title =} \StringTok{"ARIMA model forecast Plot"}\NormalTok{, }\DataTypeTok{.y_lab =} \StringTok{"New daily cases"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## frequency = 7 observations per 1 week
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in max(ids, na.rm = TRUE): no non-missing arguments to max; returning
+## -Inf
+\end{verbatim}
+
+\includegraphics{covid-19-models-forecasting_files/figure-latex/unnamed-chunk-17-1.pdf}
+
+\hypertarget{prophet-model-forecast}{%
+\subsection{PROPHET model forecast}\label{prophet-model-forecast}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{calibration_table }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(.model_id }\OperatorTok{==}\StringTok{ }\DecValTok{2}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\CommentTok{# Refit and Forecast Forward}
+\StringTok{  }\KeywordTok{modeltime_refit}\NormalTok{(covid19_confirmed_global_tbl) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{modeltime_forecast}\NormalTok{(}\DataTypeTok{h =} \StringTok{"3 months"}\NormalTok{, }\DataTypeTok{actual_data =}\NormalTok{ covid19_confirmed_global_tbl) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{plot_modeltime_forecast}\NormalTok{(}\DataTypeTok{.interactive =} \OtherTok{FALSE}\NormalTok{, }\DataTypeTok{.title =} \StringTok{"PROPHET model forecast Plot"}\NormalTok{, }\DataTypeTok{.y_lab =} \StringTok{"New daily cases"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Disabling daily seasonality. Run prophet with daily.seasonality=TRUE to override this.
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in max(ids, na.rm = TRUE): no non-missing arguments to max; returning
+## -Inf
+\end{verbatim}
+
+\includegraphics{covid-19-models-forecasting_files/figure-latex/unnamed-chunk-18-1.pdf}
+
+\hypertarget{glmnet-model-forecast}{%
+\subsection{GLMNET model forecast}\label{glmnet-model-forecast}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{calibration_table }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(.model_id }\OperatorTok{==}\StringTok{ }\DecValTok{3}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\CommentTok{# Refit and Forecast Forward}
+\StringTok{  }\KeywordTok{modeltime_refit}\NormalTok{(covid19_confirmed_global_tbl) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{modeltime_forecast}\NormalTok{(}\DataTypeTok{h =} \StringTok{"3 months"}\NormalTok{, }\DataTypeTok{actual_data =}\NormalTok{ covid19_confirmed_global_tbl) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{plot_modeltime_forecast}\NormalTok{(}\DataTypeTok{.interactive =} \OtherTok{FALSE}\NormalTok{, }\DataTypeTok{.title =} \StringTok{"GLMNET model forecast Plot"}\NormalTok{, }\DataTypeTok{.y_lab =} \StringTok{"New daily cases"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning in max(ids, na.rm = TRUE): no non-missing arguments to max; returning
+## -Inf
+\end{verbatim}
+
+\includegraphics{covid-19-models-forecasting_files/figure-latex/unnamed-chunk-19-1.pdf}
+
+\hypertarget{prophet-xgboost-model-forecast}{%
+\subsection{PROPHET + XGBOOST model
+forecast}\label{prophet-xgboost-model-forecast}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{calibration_table }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(.model_id }\OperatorTok{==}\StringTok{ }\DecValTok{5}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\CommentTok{# Refit and Forecast Forward}
+\StringTok{  }\KeywordTok{modeltime_refit}\NormalTok{(covid19_confirmed_global_tbl) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{modeltime_forecast}\NormalTok{(}\DataTypeTok{h =} \StringTok{"3 months"}\NormalTok{, }\DataTypeTok{actual_data =}\NormalTok{ covid19_confirmed_global_tbl) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{plot_modeltime_forecast}\NormalTok{(}\DataTypeTok{.interactive =} \OtherTok{FALSE}\NormalTok{, }\DataTypeTok{.title =} \StringTok{"PROPHET + XGBOOST model forecast Plot"}\NormalTok{, }\DataTypeTok{.y_lab =} \StringTok{"New daily cases"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Disabling daily seasonality. Run prophet with daily.seasonality=TRUE to override this.
+\end{verbatim}
+
+\begin{verbatim}
+## [12:45:51] WARNING: amalgamation/../src/learner.cc:480: 
+## Parameters: { validation } might not be used.
+## 
+##   This may not be accurate due to some parameters are only used in language bindings but
+##   passed down to XGBoost core.  Or some parameters are not used but slip through this
+##   verification. Please open an issue if you find above cases.
+\end{verbatim}
+
+\includegraphics{covid-19-models-forecasting_files/figure-latex/unnamed-chunk-20-1.pdf}
+
+\newpage
+
+\hypertarget{data-on-covid-19-coronavirus-only-in-france}{%
+\section{Data on COVID-19 (coronavirus) only in
+FRANCE}\label{data-on-covid-19-coronavirus-only-in-france}}
+
+Filter COVID-19 dataset in \textbf{France}.
+
+\begin{verbatim}
+## # A tibble: 126 x 2
+##    date       value
+##    <date>     <dbl>
+##  1 2020-02-26     2
+##  2 2020-02-27     3
+##  3 2020-02-28    21
+##  4 2020-02-29    19
+##  5 2020-03-01    43
+##  6 2020-03-02    30
+##  7 2020-03-03    48
+##  8 2020-03-04    34
+##  9 2020-03-05    73
+## 10 2020-03-06   138
+## # ... with 116 more rows
+\end{verbatim}
+
+\hypertarget{show-france-covid-19-new-daily-cases}{%
+\subsection{Show FRANCE COVID-19 new daily
+cases}\label{show-france-covid-19-new-daily-cases}}
+
+\includegraphics{covid-19-models-forecasting_files/figure-latex/unnamed-chunk-22-1.pdf}
+
+\hypertarget{train-test-1}{%
+\section{Train / Test}\label{train-test-1}}
+
+\hypertarget{traintest-split-time-serie-1}{%
+\subsection{Train/test split time
+serie}\label{traintest-split-time-serie-1}}
+
+\begin{verbatim}
+## Using date_var: date
+\end{verbatim}
+
+\includegraphics{covid-19-models-forecasting_files/figure-latex/unnamed-chunk-23-1.pdf}
+
+\hypertarget{modeling-1}{%
+\section{Modeling}\label{modeling-1}}
+
+\hypertarget{automatic-models-1}{%
+\subsection{Automatic Models}\label{automatic-models-1}}
+
+\hypertarget{auto-arima-1}{%
+\subsubsection{Auto ARIMA}\label{auto-arima-1}}
+
+Auto Arima Model fitting process.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{model_fit_arima <-}\StringTok{ }\KeywordTok{arima_reg}\NormalTok{() }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{set_engine}\NormalTok{(}\StringTok{"auto_arima"}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{fit}\NormalTok{(value }\OperatorTok{~}\StringTok{ }\NormalTok{date, }\KeywordTok{training}\NormalTok{(splits))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## frequency = 7 observations per 1 week
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{model_fit_arima}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## parsnip model object
+## 
+## Fit time:  531ms 
+## Series: outcome 
+## ARIMA(0,1,1)(0,0,2)[7] 
+## 
+## Coefficients:
+##           ma1    sma1    sma2
+##       -0.6935  0.1816  0.2081
+## s.e.   0.0590  0.0874  0.0886
+## 
+## sigma^2 estimated as 816656:  log likelihood=-986.23
+## AIC=1980.47   AICc=1980.82   BIC=1991.62
+\end{verbatim}
+
+\hypertarget{prophet-1}{%
+\subsubsection{Prophet}\label{prophet-1}}
+
+Prophet Model fitting process.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{model_fit_prophet <-}\StringTok{ }\KeywordTok{prophet_reg}\NormalTok{() }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{set_engine}\NormalTok{(}\StringTok{"prophet"}\NormalTok{, }\DataTypeTok{yearly.seasonality =} \OtherTok{TRUE}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{fit}\NormalTok{(value }\OperatorTok{~}\StringTok{ }\NormalTok{date, }\KeywordTok{training}\NormalTok{(splits))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Disabling daily seasonality. Run prophet with daily.seasonality=TRUE to override this.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{model_fit_prophet}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## parsnip model object
+## 
+## Fit time:  57ms 
+## PROPHET Model
+## - growth: 'linear'
+## - n.changepoints: 25
+## - seasonality.mode: 'additive'
+## - extra_regressors: 0
+\end{verbatim}
+
+\hypertarget{machine-learning-models-1}{%
+\subsection{Machine Learning Models}\label{machine-learning-models-1}}
+
+\hypertarget{preprocessing-recipe-1}{%
+\subsubsection{Preprocessing Recipe}\label{preprocessing-recipe-1}}
+
+\begin{verbatim}
+## # A tibble: 121 x 47
+##    date       value date_index.num date_year date_year.iso date_half
+##    <date>     <dbl>          <int>     <int>         <int>     <int>
+##  1 2020-02-26     2     1582675200      2020          2020         1
+##  2 2020-02-27     3     1582761600      2020          2020         1
+##  3 2020-02-28    21     1582848000      2020          2020         1
+##  4 2020-02-29    19     1582934400      2020          2020         1
+##  5 2020-03-01    43     1583020800      2020          2020         1
+##  6 2020-03-02    30     1583107200      2020          2020         1
+##  7 2020-03-03    48     1583193600      2020          2020         1
+##  8 2020-03-04    34     1583280000      2020          2020         1
+##  9 2020-03-05    73     1583366400      2020          2020         1
+## 10 2020-03-06   138     1583452800      2020          2020         1
+## # ... with 111 more rows, and 41 more variables: date_quarter <int>,
+## #   date_month <int>, date_day <int>, date_wday <int>, date_mday <int>,
+## #   date_qday <int>, date_yday <int>, date_mweek <int>, date_week <int>,
+## #   date_week.iso <int>, date_week2 <int>, date_week3 <int>, date_week4 <int>,
+## #   date_mday7 <int>, date_sin365_K1 <dbl>, date_cos365_K1 <dbl>,
+## #   date_sin365_K2 <dbl>, date_cos365_K2 <dbl>, date_sin365_K3 <dbl>,
+## #   date_cos365_K3 <dbl>, date_sin365_K4 <dbl>, date_cos365_K4 <dbl>,
+## #   date_sin365_K5 <dbl>, date_cos365_K5 <dbl>, date_month.lbl_01 <dbl>,
+## #   date_month.lbl_02 <dbl>, date_month.lbl_03 <dbl>, date_month.lbl_04 <dbl>,
+## #   date_month.lbl_05 <dbl>, date_month.lbl_06 <dbl>, date_month.lbl_07 <dbl>,
+## #   date_month.lbl_08 <dbl>, date_month.lbl_09 <dbl>, date_month.lbl_10 <dbl>,
+## #   date_month.lbl_11 <dbl>, date_wday.lbl_1 <dbl>, date_wday.lbl_2 <dbl>,
+## #   date_wday.lbl_3 <dbl>, date_wday.lbl_4 <dbl>, date_wday.lbl_5 <dbl>,
+## #   date_wday.lbl_6 <dbl>
+\end{verbatim}
+
+\hypertarget{elastic-net-1}{%
+\subsubsection{Elastic Net}\label{elastic-net-1}}
+
+Making an Elastic NET model
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{model_spec_glmnet <-}\StringTok{ }\KeywordTok{linear_reg}\NormalTok{(}\DataTypeTok{penalty =} \FloatTok{0.01}\NormalTok{, }\DataTypeTok{mixture =} \FloatTok{0.5}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{set_engine}\NormalTok{(}\StringTok{"glmnet"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Fitted workflow
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{workflow_fit_glmnet <-}\StringTok{ }\KeywordTok{workflow}\NormalTok{() }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{add_model}\NormalTok{(model_spec_glmnet) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{add_recipe}\NormalTok{(recipe_spec }\OperatorTok{%>%}\StringTok{ }\KeywordTok{step_rm}\NormalTok{(date)) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{fit}\NormalTok{(}\KeywordTok{training}\NormalTok{(splits))}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{random-forest-1}{%
+\subsubsection{Random Forest}\label{random-forest-1}}
+
+Fit a Random Forest
+
+\hypertarget{prophet-boost-1}{%
+\subsubsection{Prophet Boost}\label{prophet-boost-1}}
+
+Set the model up using a workflow
+
+\begin{verbatim}
+## Disabling daily seasonality. Run prophet with daily.seasonality=TRUE to override this.
+\end{verbatim}
+
+\begin{verbatim}
+## [12:45:55] WARNING: amalgamation/../src/learner.cc:480: 
+## Parameters: { validation } might not be used.
+## 
+##   This may not be accurate due to some parameters are only used in language bindings but
+##   passed down to XGBoost core.  Or some parameters are not used but slip through this
+##   verification. Please open an issue if you find above cases.
+\end{verbatim}
+
+\begin{verbatim}
+## == Workflow [trained] ======================================================================================================================================================
+## Preprocessor: Recipe
+## Model: prophet_boost()
+## 
+## -- Preprocessor ------------------------------------------------------------------------------------------------------------------------------------------------------------
+## 4 Recipe Steps
+## 
+## * step_timeseries_signature()
+## * step_rm()
+## * step_fourier()
+## * step_dummy()
+## 
+## -- Model -------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## PROPHET w/ XGBoost Errors
+## ---
+## Model 1: PROPHET
+## - growth: 'linear'
+## - n.changepoints: 25
+## - seasonality.mode: 'additive'
+## 
+## ---
+## Model 2: XGBoost Errors
+## 
+## xgboost::xgb.train(params = list(eta = 0.3, max_depth = 6, gamma = 0, 
+##     colsample_bytree = 1, min_child_weight = 1, subsample = 1), 
+##     data = x, nrounds = 15, early_stopping_rounds = NULL, objective = "reg:squarederror", 
+##     validation = 0)
+\end{verbatim}
+
+\hypertarget{model-evaluation-and-selection-1}{%
+\section{Model evaluation and
+selection}\label{model-evaluation-and-selection-1}}
+
+Organize the models with IDs and creates generic descriptions.
+
+\begin{verbatim}
+## # Modeltime Table
+## # A tibble: 5 x 3
+##   .model_id .model     .model_desc              
+##       <int> <list>     <chr>                    
+## 1         1 <fit[+]>   ARIMA(0,1,1)(0,0,2)[7]   
+## 2         2 <fit[+]>   PROPHET                  
+## 3         3 <workflow> GLMNET                   
+## 4         4 <workflow> RANDOMFOREST             
+## 5         5 <workflow> PROPHET W/ XGBOOST ERRORS
+\end{verbatim}
+
+\hypertarget{calibration-1}{%
+\subsection{Calibration}\label{calibration-1}}
+
+Quantify error and estimate confidence intervals.
+
+\begin{verbatim}
+## # Modeltime Table
+## # A tibble: 5 x 5
+##   .model_id .model     .model_desc               .type .calibration_data
+##       <int> <list>     <chr>                     <chr> <list>           
+## 1         1 <fit[+]>   ARIMA(0,1,1)(0,0,2)[7]    Test  <tibble [5 x 4]> 
+## 2         2 <fit[+]>   PROPHET                   Test  <tibble [5 x 4]> 
+## 3         3 <workflow> GLMNET                    Test  <tibble [5 x 4]> 
+## 4         4 <workflow> RANDOMFOREST              Test  <tibble [5 x 4]> 
+## 5         5 <workflow> PROPHET W/ XGBOOST ERRORS Test  <tibble [5 x 4]>
+\end{verbatim}
+
+\hypertarget{france-forecast-testing-set}{%
+\section{FRANCE Forecast (Testing
+Set)}\label{france-forecast-testing-set}}
+
+Visualize the testing predictions (forecast).
+
+\begin{verbatim}
+## 'new_data' is missing. Using '.calibration_data' to forecast.
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in max(ids, na.rm = TRUE): no non-missing arguments to max; returning
+## -Inf
+\end{verbatim}
+
+\includegraphics{covid-19-models-forecasting_files/figure-latex/unnamed-chunk-33-1.pdf}
+
+\hypertarget{accuracy-testing-set-1}{%
+\subsection{Accuracy (Testing Set)}\label{accuracy-testing-set-1}}
+
+Calculate the testing accuracy to compare the models.
+
+\captionsetup[table]{labelformat=empty,skip=1pt}
+\begin{longtable}{cllrrrrrr}
+\caption*{
+\large Accuracy Table\\ 
+\small \\ 
+} \\ 
+\toprule
+.model\_id & .model\_desc & .type & mae & mape & mase & smape & rmse & rsq \\ 
+\midrule
+1 & ARIMA(0,1,1)(0,0,2)[7] & Test & 618.20 & Inf & 0.55 & 167.35 & 724.97 & 0.34 \\ 
+2 & PROPHET & Test & 664.69 & Inf & 0.59 & 167.73 & 759.30 & 0.08 \\ 
+3 & GLMNET & Test & 730.82 & Inf & 0.65 & 187.91 & 925.11 & 0.06 \\ 
+4 & RANDOMFOREST & Test & 1387.80 & Inf & 1.23 & 132.80 & 1566.15 & 0.01 \\ 
+5 & PROPHET W/ XGBOOST ERRORS & Test & 409.69 & Inf & 0.36 & 127.77 & 461.89 & 0.61 \\ 
+\bottomrule
+\end{longtable}
+
+\hypertarget{analyze-results-1}{%
+\subsection{Analyze Results}\label{analyze-results-1}}
+
+From the accuracy measures and forecast results, we see that:
+
+\begin{itemize}
+\tightlist
+\item
+  RANDOMFOREST model is not a good fit for this data.
+\item
+  The best model is PROPHET W/ XGBOOST ERRORS Let's exclude the
+  RANDOMFOREST from our final model, then make future forecasts with the
+  remaining models.
+\end{itemize}
+
+\hypertarget{refit-and-forecast-forward-france-only}{%
+\section{Refit and Forecast Forward (FRANCE
+ONLY)}\label{refit-and-forecast-forward-france-only}}
+
+\begin{verbatim}
+## frequency = 7 observations per 1 week
+\end{verbatim}
+
+\begin{verbatim}
+## Disabling daily seasonality. Run prophet with daily.seasonality=TRUE to override this.
+## Disabling daily seasonality. Run prophet with daily.seasonality=TRUE to override this.
+\end{verbatim}
+
+\begin{verbatim}
+## [12:45:59] WARNING: amalgamation/../src/learner.cc:480: 
+## Parameters: { validation } might not be used.
+## 
+##   This may not be accurate due to some parameters are only used in language bindings but
+##   passed down to XGBoost core.  Or some parameters are not used but slip through this
+##   verification. Please open an issue if you find above cases.
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in max(ids, na.rm = TRUE): no non-missing arguments to max; returning
+## -Inf
+\end{verbatim}
+
+\includegraphics{covid-19-models-forecasting_files/figure-latex/unnamed-chunk-35-1.pdf}
+
+\hypertarget{arima-model-forecast-1}{%
+\subsection{ARIMA model forecast}\label{arima-model-forecast-1}}
+
+\begin{verbatim}
+## frequency = 7 observations per 1 week
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in max(ids, na.rm = TRUE): no non-missing arguments to max; returning
+## -Inf
+\end{verbatim}
+
+\includegraphics{covid-19-models-forecasting_files/figure-latex/unnamed-chunk-36-1.pdf}
+
+\hypertarget{prophet-model-forecast-1}{%
+\subsection{PROPHET model forecast}\label{prophet-model-forecast-1}}
+
+\begin{verbatim}
+## Disabling daily seasonality. Run prophet with daily.seasonality=TRUE to override this.
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in max(ids, na.rm = TRUE): no non-missing arguments to max; returning
+## -Inf
+\end{verbatim}
+
+\includegraphics{covid-19-models-forecasting_files/figure-latex/unnamed-chunk-37-1.pdf}
+
+\hypertarget{glmnet-model-forecast-1}{%
+\subsection{GLMNET model forecast}\label{glmnet-model-forecast-1}}
+
+\begin{verbatim}
+## Warning in max(ids, na.rm = TRUE): no non-missing arguments to max; returning
+## -Inf
+\end{verbatim}
+
+\includegraphics{covid-19-models-forecasting_files/figure-latex/unnamed-chunk-38-1.pdf}
+
+\hypertarget{prophet-xgboost-model-forecast-1}{%
+\subsection{PROPHET + XGBOOST model
+forecast}\label{prophet-xgboost-model-forecast-1}}
+
+\begin{verbatim}
+## Disabling daily seasonality. Run prophet with daily.seasonality=TRUE to override this.
+\end{verbatim}
+
+\begin{verbatim}
+## [12:46:03] WARNING: amalgamation/../src/learner.cc:480: 
+## Parameters: { validation } might not be used.
+## 
+##   This may not be accurate due to some parameters are only used in language bindings but
+##   passed down to XGBoost core.  Or some parameters are not used but slip through this
+##   verification. Please open an issue if you find above cases.
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in max(ids, na.rm = TRUE): no non-missing arguments to max; returning
+## -Inf
+\end{verbatim}
+
+\includegraphics{covid-19-models-forecasting_files/figure-latex/unnamed-chunk-39-1.pdf}
+
+\end{document}
