@@ -1,0 +1,528 @@
+---
+title: "COVID-19 - Forecasting and compare machine learning models"
+author: "Adrien BORDERON"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  html_document:
+    df_print: paged
+---
+
+Load the following libraries. 
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+library(tidymodels)
+library(modeltime)
+library(timetk)   
+library(lubridate)
+library(readr)
+library(dplyr)
+library(tidyr)
+library(glmnet)
+library(randomForest)
+```
+
+# Data on COVID-19 (coronavirus) by _Our World in Data_
+
+COVID-19 dataset is a collection of the COVID-19 data maintained by [_Our World in Data_](https://ourworldindata.org/coronavirus). It is updated daily and includes data on confirmed cases, deaths, and testing, as well as other variables of potential interest.
+
+We’ll start with a covid daily time series data set that includes **new daily cases**. We’ll simplify the data set to a univariate time series with columns, “date” and “value”.
+
+```{r warning=FALSE}
+data_daily  <- read.csv("~/Workdir/COVID-19-models-forecasting/data/owid-covid-data.csv")
+data_daily <- data_daily %>% select(date, new_cases) %>% drop_na(new_cases)
+
+time_series_covid19_confirmed_global <- aggregate(data_daily$new_cases, by=list(date=data_daily$date), FUN=sum)
+
+covid19_confirmed_global_tbl <- time_series_covid19_confirmed_global %>%
+  select(date, x) %>%
+  rename(value=x) 
+
+covid19_confirmed_global_tbl$date <- as.Date(covid19_confirmed_global_tbl$date, format = "%Y-%m-%d")
+covid19_confirmed_global_tbl <- covid19_confirmed_global_tbl[covid19_confirmed_global_tbl[["date"]] >= "2020-01-17", ]
+
+covid19_confirmed_global_tbl <- as.tibble(covid19_confirmed_global_tbl)
+covid19_confirmed_global_tbl
+```
+
+## Show COVID-19 new daily cases
+
+```{r, fig.width=14, fig.height=8}
+covid19_confirmed_global_tbl %>%
+  plot_time_series(date, value, .interactive = FALSE)
+```
+
+# Train / Test
+
+Split time series into training and testing sets. We use the last ****5 days** of data as the testing set.
+
+## Train/test split time serie
+
+```{r, fig.width=14, fig.height=8}
+splits <- covid19_confirmed_global_tbl %>%
+  time_series_split(assess = "5 days", cumulative = TRUE)
+
+splits %>%
+  tk_time_series_cv_plan() %>%
+  plot_time_series_cv_plan(date, value, .interactive = FALSE)
+```
+
+# Modeling
+
+## Automatic Models
+
+Several models to see this process :
+
+### Auto ARIMA
+
+Auto Arima Model fitting process.
+
+```{r}
+model_fit_arima <- arima_reg() %>%
+  set_engine("auto_arima") %>%
+  fit(value ~ date, training(splits))
+
+model_fit_arima
+```
+
+### Prophet
+
+Prophet Model fitting process.
+
+```{r}
+model_fit_prophet <- prophet_reg() %>%
+  set_engine("prophet", yearly.seasonality = TRUE) %>%
+  fit(value ~ date, training(splits))
+
+model_fit_prophet
+```
+
+## Machine Learning Models
+
+### Preprocessing Recipe
+
+```{r}
+recipe_spec <- recipe(value ~ date, training(splits)) %>%
+  step_timeseries_signature(date) %>%
+  step_rm(contains("am.pm"), contains("hour"), contains("minute"),
+          contains("second"), contains("xts")) %>%
+  step_fourier(date, period = 365, K = 5) %>%
+  step_dummy(all_nominal())
+
+recipe_spec %>% prep() %>% juice()
+```
+
+With a recipe in-hand, we can set up our machine learning pipelines.
+
+### Elastic Net
+
+Making an Elastic NET model
+
+```{r}
+model_spec_glmnet <- linear_reg(penalty = 0.01, mixture = 0.5) %>%
+  set_engine("glmnet")
+```
+
+Fitted workflow
+
+```{r}
+workflow_fit_glmnet <- workflow() %>%
+  add_model(model_spec_glmnet) %>%
+  add_recipe(recipe_spec %>% step_rm(date)) %>%
+  fit(training(splits))
+
+```
+
+### Random Forest
+
+Fit a Random Forest
+
+```{r}
+model_spec_rf <- rand_forest(trees = 500, min_n = 50) %>%
+  set_engine("randomForest")
+
+workflow_fit_rf <- workflow() %>%
+  add_model(model_spec_rf) %>%
+  add_recipe(recipe_spec %>% step_rm(date)) %>%
+  fit(training(splits))
+```
+
+### Prophet Boost
+
+Set the model up using a workflow
+
+```{r warning=FALSE}
+model_spec_prophet_boost <- prophet_boost() %>%
+  set_engine("prophet_xgboost", yearly.seasonality = TRUE) 
+
+workflow_fit_prophet_boost <- workflow() %>%
+  add_model(model_spec_prophet_boost) %>%
+  add_recipe(recipe_spec) %>%
+  fit(training(splits))
+
+workflow_fit_prophet_boost
+```
+
+# Model evaluation and selection
+
+Organize the models with IDs and creates generic descriptions.
+
+```{r}
+model_table <- modeltime_table(
+  model_fit_arima, 
+  model_fit_prophet,
+  workflow_fit_glmnet,
+  workflow_fit_rf,
+  workflow_fit_prophet_boost
+) 
+
+model_table
+```
+
+## Calibration
+
+Quantify error and estimate confidence intervals.
+
+```{r}
+calibration_table <- model_table %>%
+  modeltime_calibrate(testing(splits))
+
+calibration_table
+```
+
+# Forecast (Testing Set)
+
+Visualize the testing predictions (forecast).
+
+```{r, fig.width=14, fig.height=8}
+calibration_table %>%
+  modeltime_forecast(actual_data = covid19_confirmed_global_tbl) %>%
+  plot_modeltime_forecast(.interactive = FALSE)
+```
+
+## Accuracy (Testing Set)
+
+Calculate the testing accuracy to compare the models.
+
+```{r}
+calibration_table %>%
+  modeltime_accuracy() %>%
+  table_modeltime_accuracy(.interactive = FALSE)
+```
+
+## Analyze Results
+
+From the accuracy measures and forecast results, we see that:
+
+* RANDOMFOREST model is not a good fit for this data.
+* The best model are GLMNET and Prophet + XGBoost
+Let’s exclude the RANDOMFOREST from our final model, then make future forecasts with the remaining models.
+
+
+# Refit and Forecast Forward (Global in world)
+
+```{r, fig.width=14, fig.height=8}
+calibration_table %>%
+  # Remove RANDOMFOREST model with low accuracy
+  filter(.model_id != 4) %>%
+  
+  # Refit and Forecast Forward
+  modeltime_refit(covid19_confirmed_global_tbl) %>%
+  modeltime_forecast(h = "3 months", actual_data = covid19_confirmed_global_tbl) %>%
+  plot_modeltime_forecast(.interactive = FALSE, .title = "Compare all models forecast Plot", .y_lab = "New daily cases")
+```
+
+## ARIMA model forecast
+
+```{r, fig.width=14, fig.height=8}
+calibration_table %>%
+  filter(.model_id == 1) %>%
+  # Refit and Forecast Forward
+  modeltime_refit(covid19_confirmed_global_tbl) %>%
+  modeltime_forecast(h = "3 months", actual_data = covid19_confirmed_global_tbl) %>%
+  plot_modeltime_forecast(.interactive = FALSE, .title = "ARIMA model forecast Plot", .y_lab = "New daily cases")
+```
+
+## PROPHET model forecast
+
+```{r, fig.width=14, fig.height=8}
+calibration_table %>%
+  filter(.model_id == 2) %>%
+  # Refit and Forecast Forward
+  modeltime_refit(covid19_confirmed_global_tbl) %>%
+  modeltime_forecast(h = "3 months", actual_data = covid19_confirmed_global_tbl) %>%
+  plot_modeltime_forecast(.interactive = FALSE, .title = "PROPHET model forecast Plot", .y_lab = "New daily cases")
+```
+
+## GLMNET model forecast
+
+```{r, fig.width=14, fig.height=8}
+calibration_table %>%
+  filter(.model_id == 3) %>%
+  # Refit and Forecast Forward
+  modeltime_refit(covid19_confirmed_global_tbl) %>%
+  modeltime_forecast(h = "3 months", actual_data = covid19_confirmed_global_tbl) %>%
+  plot_modeltime_forecast(.interactive = FALSE, .title = "GLMNET model forecast Plot", .y_lab = "New daily cases")
+```
+
+## PROPHET + XGBOOST model forecast
+
+```{r fig.height=8, fig.width=14, warning=FALSE}
+calibration_table %>%
+  filter(.model_id == 5) %>%
+  # Refit and Forecast Forward
+  modeltime_refit(covid19_confirmed_global_tbl) %>%
+  modeltime_forecast(h = "3 months", actual_data = covid19_confirmed_global_tbl) %>%
+  plot_modeltime_forecast(.interactive = FALSE, .title = "PROPHET + XGBOOST model forecast Plot", .y_lab = "New daily cases")
+```
+
+
+\newpage
+
+# Data on COVID-19 (coronavirus) only in FRANCE
+
+Filter COVID-19 dataset in **France**.
+
+```{r echo=FALSE}
+data_daily  <- read.csv("~/Workdir/COVID-19-models-forecasting/data/owid-covid-data.csv")
+data_daily <- data_daily[data_daily$location == 'France',]
+data_daily <- data_daily %>% select(date, new_cases) %>% drop_na(new_cases)
+
+time_series_covid19_confirmed_global <- aggregate(data_daily$new_cases, by=list(date=data_daily$date), FUN=sum)
+
+covid19_confirmed_global_tbl <- time_series_covid19_confirmed_global %>%
+  select(date, x) %>%
+  rename(value=x) 
+
+covid19_confirmed_global_tbl$date <- as.Date(covid19_confirmed_global_tbl$date, format = "%Y-%m-%d")
+covid19_confirmed_global_tbl <- covid19_confirmed_global_tbl[covid19_confirmed_global_tbl[["date"]] >= "2020-02-26", ]
+
+covid19_confirmed_global_tbl <- as.tibble(covid19_confirmed_global_tbl)
+covid19_confirmed_global_tbl
+```
+
+## Show FRANCE COVID-19 new daily cases
+
+```{r echo=FALSE, fig.height=8, fig.width=14}
+covid19_confirmed_global_tbl %>%
+  plot_time_series(date, value, .interactive = FALSE)
+```
+
+# Train / Test
+
+## Train/test split time serie
+
+```{r echo=FALSE, fig.height=8, fig.width=14}
+splits <- covid19_confirmed_global_tbl %>%
+  time_series_split(assess = "5 days", cumulative = TRUE)
+
+splits %>%
+  tk_time_series_cv_plan() %>%
+  plot_time_series_cv_plan(date, value, .interactive = FALSE)
+```
+
+# Modeling
+
+## Automatic Models
+
+### Auto ARIMA
+
+Auto Arima Model fitting process.
+
+```{r}
+model_fit_arima <- arima_reg() %>%
+  set_engine("auto_arima") %>%
+  fit(value ~ date, training(splits))
+
+model_fit_arima
+```
+
+### Prophet
+
+Prophet Model fitting process.
+
+```{r}
+model_fit_prophet <- prophet_reg() %>%
+  set_engine("prophet", yearly.seasonality = TRUE) %>%
+  fit(value ~ date, training(splits))
+
+model_fit_prophet
+```
+
+## Machine Learning Models
+
+### Preprocessing Recipe
+
+```{r echo=FALSE}
+recipe_spec <- recipe(value ~ date, training(splits)) %>%
+  step_timeseries_signature(date) %>%
+  step_rm(contains("am.pm"), contains("hour"), contains("minute"),
+          contains("second"), contains("xts")) %>%
+  step_fourier(date, period = 365, K = 5) %>%
+  step_dummy(all_nominal())
+
+recipe_spec %>% prep() %>% juice()
+```
+
+### Elastic Net
+
+Making an Elastic NET model
+
+```{r}
+model_spec_glmnet <- linear_reg(penalty = 0.01, mixture = 0.5) %>%
+  set_engine("glmnet")
+```
+
+Fitted workflow
+
+```{r}
+workflow_fit_glmnet <- workflow() %>%
+  add_model(model_spec_glmnet) %>%
+  add_recipe(recipe_spec %>% step_rm(date)) %>%
+  fit(training(splits))
+
+```
+
+### Random Forest
+
+Fit a Random Forest
+
+```{r echo=FALSE}
+model_spec_rf <- rand_forest(trees = 500, min_n = 50) %>%
+  set_engine("randomForest")
+
+workflow_fit_rf <- workflow() %>%
+  add_model(model_spec_rf) %>%
+  add_recipe(recipe_spec %>% step_rm(date)) %>%
+  fit(training(splits))
+```
+
+### Prophet Boost
+
+Set the model up using a workflow
+
+```{r echo=FALSE}
+model_spec_prophet_boost <- prophet_boost() %>%
+  set_engine("prophet_xgboost", yearly.seasonality = TRUE) 
+
+workflow_fit_prophet_boost <- workflow() %>%
+  add_model(model_spec_prophet_boost) %>%
+  add_recipe(recipe_spec) %>%
+  fit(training(splits))
+
+workflow_fit_prophet_boost
+```
+
+# Model evaluation and selection
+
+Organize the models with IDs and creates generic descriptions.
+
+```{r echo=FALSE}
+model_table <- modeltime_table(
+  model_fit_arima, 
+  model_fit_prophet,
+  workflow_fit_glmnet,
+  workflow_fit_rf,
+  workflow_fit_prophet_boost
+) 
+
+model_table
+```
+
+## Calibration
+
+Quantify error and estimate confidence intervals.
+
+```{r echo=FALSE}
+calibration_table <- model_table %>%
+  modeltime_calibrate(testing(splits))
+
+calibration_table
+```
+
+# FRANCE Forecast (Testing Set)
+
+Visualize the testing predictions (forecast).
+
+```{r echo=FALSE, fig.height=8, fig.width=14}
+calibration_table %>%
+  modeltime_forecast(actual_data = covid19_confirmed_global_tbl) %>%
+  plot_modeltime_forecast(.interactive = FALSE)
+```
+
+## Accuracy (Testing Set)
+
+Calculate the testing accuracy to compare the models.
+
+```{r echo=FALSE}
+calibration_table %>%
+  modeltime_accuracy() %>%
+  table_modeltime_accuracy(.interactive = FALSE)
+```
+
+## Analyze Results
+
+From the accuracy measures and forecast results, we see that:
+
+* RANDOMFOREST model is not a good fit for this data.
+* The best model is PROPHET W/ XGBOOST ERRORS
+Let’s exclude the RANDOMFOREST from our final model, then make future forecasts with the remaining models.
+
+
+# Refit and Forecast Forward (FRANCE ONLY)
+
+```{r echo=FALSE, fig.height=8, fig.width=14}
+calibration_table %>%
+  # Remove RANDOMFOREST model with low accuracy
+  filter(.model_id != 4) %>%
+  
+  # Refit and Forecast Forward
+  modeltime_refit(covid19_confirmed_global_tbl) %>%
+  modeltime_forecast(h = "3 months", actual_data = covid19_confirmed_global_tbl) %>%
+  plot_modeltime_forecast(.interactive = FALSE, .title = "Compare all models forecast Plot", .y_lab = "FRANCE New daily cases")
+```
+
+## ARIMA model forecast
+
+```{r echo=FALSE, fig.height=8, fig.width=14}
+calibration_table %>%
+  filter(.model_id == 1) %>%
+  # Refit and Forecast Forward
+  modeltime_refit(covid19_confirmed_global_tbl) %>%
+  modeltime_forecast(h = "3 months", actual_data = covid19_confirmed_global_tbl) %>%
+  plot_modeltime_forecast(.interactive = FALSE, .title = "ARIMA model forecast Plot", .y_lab = "FRANCE New daily cases")
+```
+
+## PROPHET model forecast
+
+```{r echo=FALSE, fig.height=8, fig.width=14}
+calibration_table %>%
+  filter(.model_id == 2) %>%
+  # Refit and Forecast Forward
+  modeltime_refit(covid19_confirmed_global_tbl) %>%
+  modeltime_forecast(h = "3 months", actual_data = covid19_confirmed_global_tbl) %>%
+  plot_modeltime_forecast(.interactive = FALSE, .title = "PROPHET model forecast Plot", .y_lab = "FRANCE New daily cases")
+```
+
+## GLMNET model forecast
+
+```{r echo=FALSE, fig.height=8, fig.width=14}
+calibration_table %>%
+  filter(.model_id == 3) %>%
+  
+  # Refit and Forecast Forward
+  modeltime_refit(covid19_confirmed_global_tbl) %>%
+  modeltime_forecast(h = "3 months", actual_data = covid19_confirmed_global_tbl) %>%
+  plot_modeltime_forecast(.interactive = FALSE, .title = "GLMNET model forecast Plot", .y_lab = "FRANCE New daily cases")
+```
+
+## PROPHET + XGBOOST model forecast
+
+```{r echo=FALSE, fig.height=8, fig.width=14}
+calibration_table %>%
+  filter(.model_id == 5) %>%
+  # Refit and Forecast Forward
+  modeltime_refit(covid19_confirmed_global_tbl) %>%
+  modeltime_forecast(h = "3 months", actual_data = covid19_confirmed_global_tbl) %>%
+  plot_modeltime_forecast(.interactive = FALSE, .title = "PROPHET + XGBOOST model forecast Plot", .y_lab = "FRANCE New daily cases")
+```
